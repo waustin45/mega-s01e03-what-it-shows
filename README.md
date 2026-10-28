@@ -12,9 +12,9 @@ Support ticket #4471 merged 412 reports about dates as one known issue. They are
 
 ## The page
 
-- Source: [`src/routes/kb/incidents/4471/split/+page.svx`](src/routes/kb/incidents/4471/split/+page.svx), signed `Brandon` (desk ref `DR-WCJ1-V3RB`).
+- Source: [`src/routes/kb/incidents/4471-split/+page.svx`](src/routes/kb/incidents/4471-split/+page.svx), signed `Brandon` (desk ref `DR-WCJ1-V3RB`).
 - Its logic: [`src/lib/kb/split.ts`](src/lib/kb/split.ts), [`ProblemTable.svelte`](src/lib/kb/ProblemTable.svelte), [`ProblemCount.svelte`](src/lib/kb/ProblemCount.svelte).
-- As the desk sees it: [`rendered/kb/incidents/4471/split.html`](rendered/kb/incidents/4471/split.html) (static build of the whole kb in `rendered/`) and a screenshot, [`rendered/kb-incidents-4471-split.png`](rendered/kb-incidents-4471-split.png).
+- As the desk sees it: [`src/routes/kb/incidents/4471-split/page.html`](src/routes/kb/incidents/4471-split/page.html) (rendered, self-contained) and [`page.png`](src/routes/kb/incidents/4471-split/page.png). The whole kb, built, is in `rendered/`.
 
 Everything else under `src/` is the kb export as the desk gave it. `package.json`, `svelte.config.js`,
 `vite.config.js`, `src/app.html` and `src/routes/+layout.js` were added to build it
@@ -23,5 +23,5 @@ Everything else under `src/` is the kb export as the desk gave it. `package.json
 ```sh
 npm install
 npm run build      # writes build/
-npm run preview    # http://localhost:4173/kb/incidents/4471/split
+npm run preview    # http://localhost:4173/kb/incidents/4471-split
 ```
