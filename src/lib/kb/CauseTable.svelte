@@ -4,7 +4,8 @@
   import { groupByCause, readAs, ticketCause, uniqueById, type Report } from '#lib/kb/causes';
   import { tenantOf } from '#lib/kb/locales';
 
-  let { ticket }: { ticket: number } = $props();
+  // tickets: where a cause is tracked once it has a ticket of its own, cause (or 'one-day move') → URL.
+  let { ticket, tickets = {} }: { ticket: number; tickets?: Record<string, string> } = $props();
 
   const merged = $derived(uniqueById(reports as Report[]).filter((r) => r.mergedInto === ticket));
   const groups = $derived(groupByCause(merged, tenantOf));
@@ -14,6 +15,7 @@
       .sort((a, b) => b[1] - a[1])
       .map(([tag, n]) => `${tag} ×${n}`)
       .join(' · ');
+  const issue = (url: string) => '#' + url.split('/').pop();
 </script>
 
 <p class="sum">
@@ -28,13 +30,16 @@
   </thead>
   <tbody>
     {#each groups as g (g.cause)}
-      <tr class:wrong={g.cause !== owner}>
+      <tr class:wrong={!tickets[g.cause] && g.cause !== owner}>
         <td><code>{g.cause}</code></td>
         <td>{g.reports.length}</td>
         <td class="tags">{tags(g)}</td>
         <td>{g.tenants}</td>
         <td>{g.firstSeen} → {g.lastSeen}</td>
-        <td>{g.cause === owner ? `#${ticket}` : 'not this ticket — no ticket of its own'}</td>
+        <td>
+          {#if tickets[g.cause]}<a href={tickets[g.cause]}>{issue(tickets[g.cause])}</a>
+          {:else}{g.cause === owner ? `#${ticket}` : 'not this ticket — no ticket of its own'}{/if}
+        </td>
       </tr>
     {/each}
   </tbody>
@@ -43,7 +48,10 @@
 {#each groups as g (g.cause)}
   {@const moved = readAs(g, notes.oneDayMove)}
   {#if moved}
-    <p class="note">{moved} reports read as a one-day move; filed under <code>{g.cause}</code> by tenant.</p>
+    <p class="note">
+      {moved} reports read as a one-day move; filed under <code>{g.cause}</code> by tenant{#if tickets['one-day move']}, tracked in
+        <a href={tickets['one-day move']}>{issue(tickets['one-day move'])}</a>{/if}.
+    </p>
   {/if}
 {/each}
 
