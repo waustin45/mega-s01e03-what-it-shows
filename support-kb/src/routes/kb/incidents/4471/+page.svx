@@ -7,6 +7,7 @@ reviewed: 2026-10-28
 ---
 
 <script>
+  import ProblemCount from '#lib/kb/ProblemCount.svelte';
   import CauseTable from '#lib/kb/CauseTable.svelte';
   import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
   import Callout from '#lib/kb/Callout.svelte';
@@ -16,15 +17,25 @@ reviewed: 2026-10-28
 </script>
 
 Since April, people have told us their bookings land on the wrong day: a month flipped. By
-4 October the desk had **412 reports**.
+2026-10-04 the desk had <ProblemCount ticket={4471} /> unique reports.
 
-**Merged as one issue, then split.** The reports were merged on subject line. Read by tenant, way in
-and body, they are three problems: the parser reads dates month first, the `booking-v3` form hint
-tells people to type month first, and a few bookings move by one day. Each has its own ticket.
+**Merged as one issue, then split by cause.** Matching subjects hid parser and booking-form
+hint reports. The five one-day observations remain included in parser, not a third verified cause.
+See [the split and observations](/kb/incidents/4471-split).
 
 <Callout kind="warn">
-Closed 5 October. parser: fixed (<code>fix(dates): parse dd/mm for eu locales</code>). hint: won't fix, the <code>booking-v3</code> form is retired. One problem, one ticket: see <a href="/kb/incidents/4471-split">#4471, split</a>.
+The <a href="https://hq.mega.dev/challenges/what-it-shows">engineering update</a>, checked
+2026-10-28, records #4471 closed 2026-10-05, after the 2026-10-04 export.
+<code>parser</code>: FIXED (<code>fix(dates): parse dd/mm for eu locales</code>),
+<a href={tickets.parser}>#1</a> closed COMPLETED.
+<code>hint</code>: WON'T FIX (<code>booking-v3 form retired</code>),
+<a href={tickets.hint}>#2</a> closed NOT_PLANNED. Retirement is not a corrected hint.
 </Callout>
+
+[#3](https://github.com/waustin45/mega-s01e03-what-it-shows/issues/3) and
+[#4](https://github.com/waustin45/mega-s01e03-what-it-shows/issues/4) are closed DUPLICATE of #1.
+The update does not verify a separate timezone/DST cause or the parser fix's effect on the
+one-day observations. Original export data and classification remain unchanged.
 
 ## What was merged
 
@@ -36,5 +47,5 @@ Closed 5 October. parser: fixed (<code>fix(dates): parse dd/mm for eu locales</c
 
 ## Lessons
 
-- A big ticket is not one bug because its subjects match. Read what the reports show before you merge.
+- A big ticket is not one bug because its subjects match. Follow the [proposed cause-based triage](/kb/triage/dedupe) and preserve uncertain reports for review.
 - Write the page while the queue is still in your head.

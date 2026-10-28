@@ -1,0 +1,55 @@
+---
+layout: runbook
+title: '0002 · Match duplicates by evidenced cause'
+owner: Brandon
+status: proposed
+reviewed: 2026-10-28
+signature: Brandon
+---
+
+<script>
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+**Proposed:** 28 October 2026 · **Author:** Brandon · **Review requested:** Austin
+
+## Context and evidence
+
+[Decision 0001](/kb/decisions/0001-dedupe-by-subject) accepted subject-only merging.
+[#4471](/kb/incidents/4471-split) shows why that loses information: matching subjects combined
+parser and booking-form hint reports, with different engineering outcomes.
+
+The 2026-10-04 export's `causes.ts` classifies by tenant locale, form and channel, not subject
+or the browser-based intake tag. `sameCause` requires a known cause on both sides, and the
+triage explorer already uses it. The [engineering update](https://hq.mega.dev/challenges/what-it-shows),
+checked 2026-10-28, records #4471 closed 2026-10-05: parser FIXED, hint WON'T FIX because
+booking-v3 was retired. The [incident page](/kb/incidents/4471-split) records the ticket dispositions.
+
+## Proposed replacement for 0001
+
+Use a subject match to find candidates, then read the report and compare cause evidence.
+For this incident, day-first tenant reports through the booking-v3 form are `hint`; app,
+email and booking-v2 form reports are `parser`. Merge only when both causes are known and
+match. Different subjects can share a cause; matching subjects can describe different causes.
+Count unique report IDs, preserving the original export and its classification.
+
+If accepted by the owner, this record replaces the subject-only rule in 0001. Until that
+review, this is a proposal, not an accepted policy or a claim of owner approval. Leave 0001 unchanged.
+[The proposed triage guidance](/kb/triage/dedupe) describes the steps.
+
+## Uncertain cases
+
+Keep unknown causes separate for desk review, including two unknowns. Record the missing
+tenant, locale, form or channel evidence and any contradictory body text. Do not use subject
+or intake tag as a substitute. Preserve one-day observations without promoting them to a
+verified timezone/DST cause or adding their reports to the total again.
+
+## Consequences
+
+- Triage takes more reading and may leave reports pending evidence.
+- Engineering gets separate threads for different evidenced causes, even when subjects match.
+- Unusual observations remain visible within the desk's counts. A duplicate disposition does
+  not prove the parser fix cured them, or that it cannot cure them.
+- Future policy changes get new records; accepted decisions remain historical records.
+
+<RenderStamp {signature} />

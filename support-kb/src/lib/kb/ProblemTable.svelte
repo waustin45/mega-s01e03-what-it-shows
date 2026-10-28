@@ -6,7 +6,11 @@
   import { tenantOf } from '#lib/kb/locales';
 
   // tickets: where each problem is tracked now, problem → issue URL.
-  let { ticket, tickets = {} }: { ticket: number; tickets?: Partial<Record<Problem, string>> } = $props();
+  let { ticket, tickets = {}, outcomes = {} }: {
+    ticket: number;
+    tickets?: Partial<Record<Problem, string>>;
+    outcomes?: Partial<Record<Problem, string>>;
+  } = $props();
 
   const split = $derived(splitTicket(reports as Report[], ticket, tenantOf, notes.oneDayMove));
   const tags = (n: Record<string, number>) =>
@@ -20,12 +24,13 @@
 <p class="sum">
   <strong>{split.reports.length}</strong> reports merged into #{ticket}
   ({split.rows} rows in the export, {split.rows - split.reports.length} of them repeats) ·
-  <strong>{split.problems.length}</strong> {split.problems.length === 1 ? 'problem' : 'problems'}
+  <strong>{split.problems.length}</strong> {split.problems.length === 1 ? 'cause' : 'causes'}
 </p>
 
+<div class="table-wrap">
 <table>
   <thead>
-    <tr><th>problem</th><th>reports</th><th>tagged as</th><th>tenants</th><th>seen</th><th>ticket</th></tr>
+    <tr><th>cause</th><th>reports</th><th>tagged as</th><th>tenants</th><th>seen</th><th>ticket / disposition</th></tr>
   </thead>
   <tbody>
     {#each split.problems as p (p.problem)}
@@ -37,21 +42,29 @@
         <td class="small">{p.firstSeen} → {p.lastSeen}</td>
         <td>
           {#if tickets[p.problem]}<a href={tickets[p.problem]}>{issue(tickets[p.problem]!)}</a>{:else}<span class="none">none yet</span>{/if}
+          {#if outcomes[p.problem]}<br /><span class="small">{outcomes[p.problem]}</span>{/if}
         </td>
       </tr>
     {/each}
   </tbody>
 </table>
+</div>
 
-{#each split.problems.filter((p) => p.filedUnder) as p (p.problem)}
-  <p class="note">
-    The {p.reports.length} <code>{p.problem}</code> reports are counted under <code>{p.filedUnder}</code> too, where
-    the desk files them by tenant. They have their own ticket because the <code>{p.filedUnder}</code> fix will not
-    fix them.
-  </p>
-{/each}
+{#if split.oneDayReports.length}
+  <details open>
+    <summary>{split.oneDayReports.length} one-day observations (already included above)</summary>
+    <p class="note">Desk-note observations, not a separately verified cause. Neither their root cause nor
+      the parser fix's effect on them is confirmed by the engineering update.</p>
+    <ul>
+      {#each split.oneDayReports as r (r.id)}
+        <li><code>{r.id}</code>: {r.body}</li>
+      {/each}
+    </ul>
+  </details>
+{/if}
 
 <style>
+  .table-wrap { overflow-x: auto; }
   .sum { font-size: 1.1rem; }
   .small { color: var(--muted); font-size: 0.85em; }
   .note { color: var(--muted); font-size: 0.85em; }

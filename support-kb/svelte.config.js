@@ -10,6 +10,6 @@ export default {
   kit: {
     adapter: adapter({ strict: false }),
     alias: { '#lib': 'src/lib' },
-    prerender: { entries: ['/kb', '/kb/incidents/4471', '/kb/incidents/4471-split', '/kb/triage/dedupe', '/kb/decisions/0001-dedupe-by-subject'], handleHttpError: 'warn' },
+    prerender: { entries: ['/kb', '/kb/incidents/4471', '/kb/incidents/4471-split', '/kb/triage/dedupe', '/kb/decisions/0001-dedupe-by-subject', '/kb/decisions/0002-dedupe-by-cause'], handleHttpError: 'warn' },
   },
 };
