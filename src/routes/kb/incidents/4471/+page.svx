@@ -12,7 +12,7 @@ reviewed: 2026-10-28
   import Callout from '#lib/kb/Callout.svelte';
 
   const repo = 'https://github.com/waustin45/mega-s01e03-what-it-shows/issues';
-  const tickets = { parser: `${repo}/4`, hint: `${repo}/2`, 'one-day move': `${repo}/3` };
+  const tickets = { parser: `${repo}/1`, hint: `${repo}/2`, 'one-day move': `${repo}/3` };
 </script>
 
 Since April, people have told us their bookings land on the wrong day: a month flipped. By

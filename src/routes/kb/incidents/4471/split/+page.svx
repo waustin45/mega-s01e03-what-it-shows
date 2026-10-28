@@ -14,7 +14,7 @@ signature: Brandon
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 
   const repo = 'https://github.com/waustin45/mega-s01e03-what-it-shows/issues';
-  const tickets = { parser: `${repo}/4`, hint: `${repo}/2`, 'one-day move': `${repo}/3` };
+  const tickets = { parser: `${repo}/1`, hint: `${repo}/2`, 'one-day move': `${repo}/3` };
   const oneDay = tickets['one-day move'];
 </script>
 
@@ -33,7 +33,7 @@ ticket now.
 
 ## The three problems
 
-### `parser`: day and month swap: <ProblemCount ticket={4471} problem="parser" /> reports · <a href={tickets.parser}>ticket #4</a>
+### `parser`: day and month swap: <ProblemCount ticket={4471} problem="parser" /> reports · <a href={tickets.parser}>ticket #1</a>
 
 The shared parser reads every date month first. Every tenant on file writes the day first, so
 7 April is stored as 4 July. Only days 1 to 12 can swap, so most bookings look fine and the rest land
