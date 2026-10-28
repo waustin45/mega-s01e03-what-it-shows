@@ -1,0 +1,70 @@
+---
+layout: runbook
+title: '#4471, split: three problems, three tickets'
+owner: Brandon
+status: open
+reviewed: 2026-10-28
+signature: Brandon
+---
+
+<script>
+  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import ProblemCount from '#lib/kb/ProblemCount.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+
+  const repo = 'https://github.com/waustin45/mega-s01e03-what-it-shows/issues';
+  const tickets = { parser: `${repo}/1`, hint: `${repo}/2`, 'one-day move': `${repo}/3` };
+  const oneDay = tickets['one-day move'];
+</script>
+
+[#4471](/kb/incidents/4471) holds <ProblemCount ticket={4471} /> reports about dates, merged as one
+issue because their subject lines looked alike ([decision 0001](/kb/decisions/0001-dedupe-by-subject)).
+Read what each report shows, and where it came from, and they are three problems. Each has its own
+ticket now.
+
+<Callout kind="warn">
+Fixing the parser does not close #4471. The hint and one-day reports stay broken after that fix.
+</Callout>
+
+## What #4471 holds
+
+<ProblemTable ticket={4471} {tickets} />
+
+## The three problems
+
+### `parser`: day and month swap: <ProblemCount ticket={4471} problem="parser" /> reports · <a href={tickets.parser}>ticket #1</a>
+
+The shared parser reads every date month first. Every tenant on file writes the day first, so
+7 April is stored as 4 July. Only days 1 to 12 can swap, so most bookings look fine and the rest land
+months away. These are reports from day-first tenants by app, by email, or through a `booking-v2` form.
+
+### `hint`: the form tells people to type month first: <ProblemCount ticket={4471} problem="hint" /> reports · <a href={tickets.hint}>ticket #2</a>
+
+`booking-v3` prints `MM/DD/YYYY` under its date field and reads what is typed the tenant's way, day
+first. People do what the hint says and get a swapped date before the parser sees it. These are the
+reports that came through the form at the `booking-v3` tenants. The same tenants' app and email
+reports are `parser`. Fix the parser alone and these stay broken.
+
+### `one-day move`: the date moves by one day, it does not swap: <ProblemCount ticket={4471} problem="one-day move" /> reports · <a href={oneDay}>ticket #3</a>
+
+The desk read these as a one-day move already (`desk-notes.json`), and the bodies say so: Tuesday
+became Monday, Lisbon and Toronto saw different days for one meeting, June was one day off, an invite
+came before its booking. A swap cannot do that. It looks like time zone or daylight-saving handling.
+The old table counted them under `parser` by tenant.
+
+## How the split is made
+
+- One id, one report: the export repeats some reports, so they are counted once (`uniqueById`).
+- The tenant decides the cause, not intake's tag (`causes.ts`). Intake guesses from the reporter's
+  browser and is wrong in both directions; the "tagged as" column shows by how much.
+- The desk's own notes decide the one-day moves (`split.ts`, `problemOf`).
+- Every number on this page is computed from `reports-4471.json` when the page renders.
+
+## Lessons
+
+- A matching subject line says two people are unhappy about the same thing, not that one bug did it.
+  Read the body and the way in before you merge.
+- When a note on the desk contradicts the table, the table is wrong: give the note its own row.
+
+<RenderStamp {signature} />
