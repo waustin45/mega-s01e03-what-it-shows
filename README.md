@@ -21,7 +21,7 @@ the parser fix resolves the one-day observations.
 
 - [Signed split page](support-kb/src/routes/kb/incidents/4471-split/+page.svx), its
   [standalone HTML](support-kb/src/routes/kb/incidents/4471-split/page.html) and
-  [PNG](support-kb/src/routes/kb/incidents/4471-split/page.png). Signature `Brandon` produces desk ref `DR-WCJ1-V3RB`.
+  [PNG](support-kb/src/routes/kb/incidents/4471-split/page.png). The page carries the course-issued signature and its derived desk reference.
 - [Proposed decision 0002](support-kb/src/routes/kb/decisions/0002-dedupe-by-cause/+page.svx) and
   revised [triage](support-kb/src/routes/kb/triage/dedupe/+page.svx) use evidenced causes and preserve unknown cases
   for review. Austin's approval is pending; accepted decision 0001 is unchanged.

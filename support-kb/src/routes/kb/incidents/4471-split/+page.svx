@@ -4,7 +4,7 @@ title: '#4471, split: two causes and one-day observations'
 owner: Brandon
 status: closed
 reviewed: 2026-10-28
-signature: Brandon
+signature: v1.eyJzdWIiOiI1MDU5IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMyMTg2NzEsImV4cCI6MTc5MzMwNTA3MX0.XYIZeKN4gD_ltdj3V457yXJlsoHQZE4Ab4OEDrbnKw0
 ---
 
 <script>
