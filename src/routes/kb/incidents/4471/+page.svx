@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 · dates parse mm/dd in eu locales'
 owner: support desk
-status: split
+status: closed
 reviewed: 2026-10-28
 ---
 
@@ -23,7 +23,7 @@ and body, they are three problems: the parser reads dates month first, the `book
 tells people to type month first, and a few bookings move by one day. Each has its own ticket.
 
 <Callout kind="warn">
-Split. One problem, one ticket: see <a href="/kb/incidents/4471/split">#4471, split</a>. The parser fix alone does not close this.
+Closed 5 October. parser: fixed (<code>fix(dates): parse dd/mm for eu locales</code>). hint: won't fix, the <code>booking-v3</code> form is retired. One problem, one ticket: see <a href="/kb/incidents/4471/split">#4471, split</a>.
 </Callout>
 
 ## What was merged

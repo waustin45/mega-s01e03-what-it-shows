@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471, split: three problems, three tickets'
 owner: Brandon
-status: open
+status: closed
 reviewed: 2026-10-28
 signature: Brandon
 ---
@@ -24,7 +24,7 @@ Read what each report shows, and where it came from, and they are three problems
 ticket now.
 
 <Callout kind="warn">
-Fixing the parser does not close #4471. The hint and one-day reports stay broken after that fix.
+#4471 closed 5 October. <code>parser</code> is fixed (<code>fix(dates): parse dd/mm for eu locales</code>). <code>hint</code> is won't fix: the <code>booking-v3</code> form is retired.
 </Callout>
 
 ## What #4471 holds
