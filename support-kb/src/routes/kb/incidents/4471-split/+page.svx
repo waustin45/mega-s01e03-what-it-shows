@@ -1,6 +1,6 @@
 ---
 layout: runbook
-title: '#4471, split: three problems, three tickets'
+title: '#4471, split: two causes and one-day observations'
 owner: Brandon
 status: closed
 reviewed: 2026-10-28
@@ -14,61 +14,73 @@ signature: Brandon
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 
   const repo = 'https://github.com/waustin45/mega-s01e03-what-it-shows/issues';
-  const tickets = { parser: `${repo}/1`, hint: `${repo}/2`, 'one-day move': `${repo}/3` };
-  const oneDay = tickets['one-day move'];
+  const tickets = { parser: `${repo}/1`, hint: `${repo}/2` };
+  const outcomes = { parser: 'closed COMPLETED', hint: 'closed NOT_PLANNED' };
 </script>
 
-[#4471](/kb/incidents/4471) holds <ProblemCount ticket={4471} /> reports about dates, merged as one
-issue because their subject lines looked alike ([decision 0001](/kb/decisions/0001-dedupe-by-subject)).
-Read what each report shows, and where it came from, and they are three problems. Each has its own
-ticket now.
+[#4471](/kb/incidents/4471) holds <ProblemCount ticket={4471} /> unique reports about dates,
+merged because their subjects looked alike ([decision 0001](/kb/decisions/0001-dedupe-by-subject)).
+The desk's tenant, form and channel evidence separates two causes. The one-day observations
+remain visible within parser's count; they are not an additional cause total.
 
 <Callout kind="warn">
-#4471 closed 5 October. <code>parser</code> is fixed (<code>fix(dates): parse dd/mm for eu locales</code>). <code>hint</code> is won't fix: the <code>booking-v3</code> form is retired.
+The <a href="https://hq.mega.dev/challenges/what-it-shows">engineering update</a>, checked
+2026-10-28, records #4471 closed 2026-10-05, after the 2026-10-04 export.
+<code>parser</code>: FIXED (<code>fix(dates): parse dd/mm for eu locales</code>),
+<a href={tickets.parser}>#1</a> closed COMPLETED.
+<code>hint</code>: WON'T FIX (<code>booking-v3 form retired</code>),
+<a href={tickets.hint}>#2</a> closed NOT_PLANNED. The form was retired, not its hint corrected.
 </Callout>
 
 ## What #4471 holds
 
-<ProblemTable ticket={4471} {tickets} />
+<ProblemTable ticket={4471} {tickets} {outcomes} />
 
-## The three problems
+## The two causes
 
-### `parser`: day and month swap: <ProblemCount ticket={4471} problem="parser" /> reports · <a href={tickets.parser}>ticket #1</a>
+### `parser`: <ProblemCount ticket={4471} problem="parser" /> reports · <a href={tickets.parser}>ticket #1</a>
 
-The shared parser reads every date month first. Every tenant on file writes the day first, so
-7 April is stored as 4 July. Only days 1 to 12 can swap, so most bookings look fine and the rest land
-months away. These are reports from day-first tenants by app, by email, or through a `booking-v2` form,
-counted as the desk files them by tenant, so the one-day moves below are in this count too.
+The shared parser read dates month first. Every tenant on file writes the day first, so
+7 April could be stored as 4 July. Dates with days 1 to 12 can swap day and month. The desk
+files day-first tenants' app, email and booking-v2 form reports here, including the one-day
+observations below. #1 is closed COMPLETED following the parser fix.
 
-### `hint`: the form tells people to type month first: <ProblemCount ticket={4471} problem="hint" /> reports · <a href={tickets.hint}>ticket #2</a>
+### `hint`: <ProblemCount ticket={4471} problem="hint" /> reports · <a href={tickets.hint}>ticket #2</a>
 
-`booking-v3` prints `MM/DD/YYYY` under its date field and reads what is typed the tenant's way, day
-first. People do what the hint says and get a swapped date before the parser sees it. These are the
-reports that came through the form at the `booking-v3` tenants. The same tenants' app and email
-reports are `parser`. Fix the parser alone and these stay broken.
+The booking-v3 form printed `MM/DD/YYYY` but read input in the tenant's day-first order.
+These are form reports at booking-v3 tenants; those tenants' app and email reports belong
+to parser. #2 is closed NOT_PLANNED because booking-v3 was retired. This is a different
+outcome from fixing the hint or parser.
 
-### `one-day move`: the date moves by one day, it does not swap: <ProblemCount ticket={4471} problem="one-day move" /> reports · <a href={oneDay}>ticket #3</a>
+## One-day observations, included in parser
 
-The desk read these as a one-day move already (`desk-notes.json`), and the bodies say so: Tuesday
-became Monday, Lisbon and Toronto saw different days for one meeting, June was one day off, an invite
-came before its booking. A swap cannot do that. It looks like time zone or daylight-saving handling.
-The desk counts them under `parser` by tenant, and so does this page; the parser fix will not fix
-them, so they have their own ticket.
+The desk's `desk-notes.json` flags <ProblemCount ticket={4471} observations /> reports whose
+bodies describe one-day moves or timing anomalies, listed above.
+Their IDs remain in the <ProblemCount ticket={4471} problem="parser" /> parser reports, counted once. They do not establish a
+separate timezone/DST root cause.
+
+[Ticket #3](https://github.com/waustin45/mega-s01e03-what-it-shows/issues/3) is closed DUPLICATE
+of [#1](https://github.com/waustin45/mega-s01e03-what-it-shows/issues/1), as is the replacement
+parser [#4](https://github.com/waustin45/mega-s01e03-what-it-shows/issues/4). The engineering
+update does not confirm whether the parser fix resolves the one-day observations. Neither
+success nor failure of that fix on these observations has been verified.
 
 ## How the split is made
 
-- One id, one report: the export repeats some reports, so they are counted once (`uniqueById`).
-- The tenant decides the cause, not intake's tag (`causes.ts`). Intake guesses from the reporter's
-  browser and is wrong in both directions; the "tagged as" column shows by how much.
-- Counts are the desk's own view: `groupByCause` and `readAs` from `causes.ts`, as `CauseTable`
-  uses them (`split.ts`).
-- The desk's own notes decide the one-day moves (`desk-notes.json`).
-- Every number on this page is computed from `reports-4471.json` when the page renders.
+- One ID, one report: `uniqueById` removes identical export repeats.
+- `groupByCause` in the original `causes.ts` uses tenant locale, form and channel. Intake's
+  browser-based tag is a guess; the table keeps it visible for comparison.
+- `split.ts` keeps the cause totals separate from overlapping desk-note observations.
+- Counts come from the original report export and tenant directory when the page renders.
+  Historical timestamps and classification are unchanged.
+- Ticket dispositions were checked on 2026-10-28; they and the engineering update are later
+  evidence, not fields in the 2026-10-04 export.
 
 ## Lessons
 
-- A matching subject line says two people are unhappy about the same thing, not that one bug did it.
-  Read the body and the way in before you merge.
-- When a note on the desk contradicts the table, the table is wrong: give the note its own row.
+- Read the body and the way in before merging. [Proposed decision 0002](/kb/decisions/0002-dedupe-by-cause)
+  and [triage guidance](/kb/triage/dedupe) replace subject-only matching subject to Austin's review.
+- Preserve contradictory observations without turning them into a verified cause or counting
+  them twice. Keep unknown cases separate for review.
 
 <RenderStamp {signature} />

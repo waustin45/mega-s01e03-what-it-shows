@@ -5,12 +5,13 @@
   import type { Report } from '#lib/kb/causes';
   import { tenantOf } from '#lib/kb/locales';
 
-  // Inline count for prose: <ProblemCount ticket={4471} /> is every report, problem="hint" one problem.
-  let { ticket, problem }: { ticket: number; problem?: Problem } = $props();
+  // Observations are a subset, never added to the cause totals.
+  let { ticket, problem, observations = false }: { ticket: number; problem?: Problem; observations?: boolean } = $props();
 
   const split = $derived(splitTicket(reports as Report[], ticket, tenantOf, notes.oneDayMove));
   const n = $derived(
-    problem ? (split.problems.find((p) => p.problem === problem)?.reports.length ?? 0) : split.reports.length,
+    observations ? split.oneDayReports.length :
+      problem ? (split.problems.find((p) => p.problem === problem)?.reports.length ?? 0) : split.reports.length,
   );
 </script>
 

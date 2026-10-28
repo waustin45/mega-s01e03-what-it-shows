@@ -2,8 +2,8 @@
 layout: runbook
 title: 'Triage: duplicate reports'
 owner: support desk
-status: accepted
-reviewed: 2024-06-11
+status: proposed
+reviewed: 2026-10-28
 ---
 
 <script>
@@ -11,22 +11,25 @@ reviewed: 2024-06-11
   import Callout from '#lib/kb/Callout.svelte';
 </script>
 
-A busy morning brings hundreds of reports about the same thing. We keep one ticket per issue
-and merge every duplicate into it, so engineering sees one thread with a count.
-
-## The rule
-
-A report is a duplicate when its **subject line matches** the subject of an open ticket
-([decision 0001](/kb/decisions/0001-dedupe-by-subject)):
-
-1. lowercase the subject and strip punctuation;
-2. look for an open ticket with the same subject;
-3. found one: merge the report into it. None: open a new ticket.
+Keep one ticket per evidenced cause, with a count of unique reports. A matching subject helps
+find a candidate ticket; subject alone is not a cause.
 
 <Callout>
-Matching on subject is fast and needs no reading. During an incident that matters more than
-anything else.
+This guidance follows <a href="/kb/decisions/0002-dedupe-by-cause">proposed decision 0002</a>,
+which Austin must review. <a href="/kb/decisions/0001-dedupe-by-subject">Accepted decision 0001</a>
+is preserved as history; this proposal does not record owner approval.
 </Callout>
+
+## The proposed rule
+
+1. Read the body and identify the tenant, its locale, booking form and report channel.
+2. Compare that evidence with the candidate ticket's cause. For #4471, a day-first tenant's
+   `booking-v3` form reports belong to `hint`; app, email and `booking-v2` form reports belong
+   to `parser`. Intake's browser-based tag is a guess, not the tenant's cause.
+3. Merge only when both reports have the same known cause, as `sameCause` checks in `causes.ts`.
+   Different subjects or tenants can still share a cause. The same subject or tenant can cover
+   different causes when the form or channel differs.
+4. Keep different causes apart. If a known cause has no ticket, open one. Count each report ID once.
 
 ## Try it
 
@@ -34,4 +37,10 @@ anything else.
 
 ## When you are unsure
 
-Merge. Splitting a ticket later is cheaper than two engineers chasing the same bug.
+Keep the report separate for review. Record missing tenant, locale, form or channel evidence,
+or a body that does not fit the known explanation. An unknown cause is not a match, including
+when both reports are unknown. Do not merge on subject or intake tag to clear the queue.
+
+Keep observations attached to their report IDs without inventing a new cause. The one-day
+observations in [#4471](/kb/incidents/4471-split) remain included in the parser count; their
+root cause and the parser fix's effect on them are unverified.

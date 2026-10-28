@@ -49,8 +49,11 @@
   {@const moved = readAs(g, notes.oneDayMove)}
   {#if moved}
     <p class="note">
-      {moved} reports read as a one-day move; filed under <code>{g.cause}</code> by tenant{#if tickets['one-day move']}, tracked in
-        <a href={tickets['one-day move']}>{issue(tickets['one-day move'])}</a>{/if}.
+      {moved} reports read as a one-day move, already included under <code>{g.cause}</code> by tenant.
+      {#if tickets['one-day move']}<a href={tickets['one-day move']}>{issue(tickets['one-day move'])}</a>
+        is closed DUPLICATE of {#if tickets[g.cause]}<a href={tickets[g.cause]}>{issue(tickets[g.cause])}</a>{:else}{g.cause}{/if}.{/if}
+      These are observations, not a separately verified root cause; the engineering update does not
+      confirm whether the parser fix resolves them.
     </p>
   {/if}
 {/each}
