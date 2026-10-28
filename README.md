@@ -6,7 +6,7 @@ Support ticket #4471 merged 412 reports about dates as one known issue. They are
 
 | problem | reports | ticket |
 |---|---|---|
-| `parser`: the shared parser reads day-first dates month first | 374 | [#1](https://github.com/waustin45/mega-s01e03-what-it-shows/issues/1) |
+| `parser`: the shared parser reads day-first dates month first | 379 (incl. the 5 one-day moves, as the desk counts them) | [#1](https://github.com/waustin45/mega-s01e03-what-it-shows/issues/1) |
 | `hint`: the booking-v3 form hint says MM/DD/YYYY, the form reads DD/MM | 33 | [#2](https://github.com/waustin45/mega-s01e03-what-it-shows/issues/2) |
 | `one-day move`: the date shifts by one day (time zone / DST), not a swap | 5 | [#3](https://github.com/waustin45/mega-s01e03-what-it-shows/issues/3) |
 

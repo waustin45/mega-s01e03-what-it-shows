@@ -10,7 +10,7 @@
 
   const split = $derived(splitTicket(reports as Report[], ticket, tenantOf, notes.oneDayMove));
   const n = $derived(
-    problem ? (split.groups.find((g) => g.problem === problem)?.reports.length ?? 0) : split.reports.length,
+    problem ? (split.problems.find((p) => p.problem === problem)?.reports.length ?? 0) : split.reports.length,
   );
 </script>
 

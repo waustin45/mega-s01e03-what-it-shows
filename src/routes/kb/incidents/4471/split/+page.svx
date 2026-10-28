@@ -37,7 +37,8 @@ Fixing the parser does not close #4471. The hint and one-day reports stay broken
 
 The shared parser reads every date month first. Every tenant on file writes the day first, so
 7 April is stored as 4 July. Only days 1 to 12 can swap, so most bookings look fine and the rest land
-months away. These are reports from day-first tenants by app, by email, or through a `booking-v2` form.
+months away. These are reports from day-first tenants by app, by email, or through a `booking-v2` form,
+counted as the desk files them by tenant, so the one-day moves below are in this count too.
 
 ### `hint`: the form tells people to type month first: <ProblemCount ticket={4471} problem="hint" /> reports · <a href={tickets.hint}>ticket #2</a>
 
@@ -51,14 +52,17 @@ reports are `parser`. Fix the parser alone and these stay broken.
 The desk read these as a one-day move already (`desk-notes.json`), and the bodies say so: Tuesday
 became Monday, Lisbon and Toronto saw different days for one meeting, June was one day off, an invite
 came before its booking. A swap cannot do that. It looks like time zone or daylight-saving handling.
-The old table counted them under `parser` by tenant.
+The desk counts them under `parser` by tenant, and so does this page; the parser fix will not fix
+them, so they have their own ticket.
 
 ## How the split is made
 
 - One id, one report: the export repeats some reports, so they are counted once (`uniqueById`).
 - The tenant decides the cause, not intake's tag (`causes.ts`). Intake guesses from the reporter's
   browser and is wrong in both directions; the "tagged as" column shows by how much.
-- The desk's own notes decide the one-day moves (`split.ts`, `problemOf`).
+- Counts are the desk's own view: `groupByCause` and `readAs` from `causes.ts`, as `CauseTable`
+  uses them (`split.ts`).
+- The desk's own notes decide the one-day moves (`desk-notes.json`).
 - Every number on this page is computed from `reports-4471.json` when the page renders.
 
 ## Lessons
