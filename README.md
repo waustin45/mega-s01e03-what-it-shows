@@ -12,15 +12,16 @@ Support ticket #4471 merged 412 reports about dates as one known issue. They are
 
 ## The page
 
-- Source: [`src/routes/kb/incidents/4471-split/+page.svx`](src/routes/kb/incidents/4471-split/+page.svx), signed `Brandon` (desk ref `DR-WCJ1-V3RB`).
-- Its logic: [`src/lib/kb/split.ts`](src/lib/kb/split.ts), [`ProblemTable.svelte`](src/lib/kb/ProblemTable.svelte), [`ProblemCount.svelte`](src/lib/kb/ProblemCount.svelte).
-- As the desk sees it: [`src/routes/kb/incidents/4471-split/page.html`](src/routes/kb/incidents/4471-split/page.html) (rendered, self-contained) and [`page.png`](src/routes/kb/incidents/4471-split/page.png). The whole kb, built, is in `rendered/`.
+- Source: [`support-kb/src/routes/kb/incidents/4471-split/+page.svx`](support-kb/src/routes/kb/incidents/4471-split/+page.svx), signed `Brandon` (desk ref `DR-WCJ1-V3RB`).
+- Its logic: [`support-kb/src/lib/kb/split.ts`](support-kb/src/lib/kb/split.ts), [`ProblemTable.svelte`](support-kb/src/lib/kb/ProblemTable.svelte), [`ProblemCount.svelte`](support-kb/src/lib/kb/ProblemCount.svelte).
+- As the desk sees it: [`support-kb/src/routes/kb/incidents/4471-split/page.html`](support-kb/src/routes/kb/incidents/4471-split/page.html) (rendered, self-contained) and [`page.png`](support-kb/src/routes/kb/incidents/4471-split/page.png). The whole kb, built, is in `support-kb/rendered/`.
 
-Everything else under `src/` is the kb export as the desk gave it. `package.json`, `svelte.config.js`,
+Everything else under `support-kb/src/` is the kb export as the desk gave it. `package.json`, `svelte.config.js`,
 `vite.config.js`, `src/app.html` and `src/routes/+layout.js` were added to build it
 (SvelteKit 2, Svelte 5, mdsvex, adapter-static).
 
 ```sh
+cd support-kb
 npm install
 npm run build      # writes build/
 npm run preview    # http://localhost:4173/kb/incidents/4471-split
